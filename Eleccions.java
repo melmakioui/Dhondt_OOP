@@ -1,21 +1,37 @@
 package Dhondt_OOP;
 
+import Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit;
+
 public class Eleccions {
 
-    private final Partit[] partits;
-    private final int esconsPerAssignar;
+
     private final int numPartits;
+    private final int esconsPerAssignar;
+    private final Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit[] partits;
     private final float[][] taulaResultats;
 
-    public Eleccions(Partit[] partits, float percentatgeMinim, int esconsPerAssignar) {
-        this.partits = partits;
-        this.esconsPerAssignar = esconsPerAssignar;
+    public Eleccions(String[] partits, int[] votacions, int esconsPerAssignar, int percentatgeMinim){
+
         this.numPartits = partits.length;
+        this.partits = new Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit[this.numPartits];
+        this.esconsPerAssignar = esconsPerAssignar;
         this.taulaResultats = new float[this.numPartits][esconsPerAssignar];
 
-        initPartitsAmbPercentatgeMinim(partits, percentatgeMinim);
-        initTaulaDhondt(partits,esconsPerAssignar);
+        initPartits(partits,votacions);
+        initDeterminarParticipants(percentatgeMinim);
+        initTaulaDhondt();
     }
+
+
+    private void initPartits(String[] partits, int[] votacions){
+
+        for (int i = 0; i < this.numPartits; i++) {
+            this.partits[i] = new Partit(partits[i],votacions[i]);
+            //System.out.println(this.partits[i].getVots());
+        }
+
+    }
+
 
     private int votsTotals() {
         int total = 0;
@@ -27,18 +43,21 @@ public class Eleccions {
 
     }
 
-    private void initPartitsAmbPercentatgeMinim(Partit[] partits, float percentatgeMinim) {
+
+    private void initDeterminarParticipants(float percentatgeMinim) {
         float minimVotacions = ((float) votsTotals() * (percentatgeMinim /100));
 
-        for (int i = 0; i < this.numPartits; i++) {
-            this.partits[i].setParticipa((this.partits[i].getVots() >= minimVotacions));
+        for (int i = 0; i < numPartits; i++) {
+            partits[i].setParticipa((partits[i].getVots() >= minimVotacions));
         }
     }
 
-    private void initTaulaDhondt(Partit[] partits, int esconsPerAssignar) {
+
+
+    private void initTaulaDhondt() {
         for (int i = 0; i < numPartits; i++) {
             for (int j = 0; j < esconsPerAssignar; j++) {
-                this.taulaResultats[i][j] = (partits[i].getVots() / ((float) j + 1));
+                taulaResultats[i][j] = (this.partits[i].getVots() / ((float) j + 1));
             }
         }
     }
@@ -46,25 +65,22 @@ public class Eleccions {
 
     public void calcDhondt(){
 
-        float max = Float.MIN_VALUE;
+        float max = 0;
         int maxIndex = 0;
         int contador = 0;
 
-        while (contador < esconsPerAssignar) {
-
-            for (int i = 0; i < this.numPartits; i++) {
-                if (max < this.taulaResultats[ i ] [ partits[ i ].getEscons() ] && partits[ i ].isParticipa()) {
-                    max = this.taulaResultats[ i ] [ partits[ i ].getEscons() ];
+        for (int e = 0; e < esconsPerAssignar; e++){
+            for (int i = 0; i < numPartits; i++) {
+                if (max < taulaResultats[ i ] [ partits[ i ].getEscons() ] && partits[ i ].isParticipa()) {
+                    max = taulaResultats[ i ] [ partits[ i ].getEscons() ];
                     maxIndex = i;
                 }
             }
             partits[maxIndex].setEscons(1);
-            max = Float.MIN_VALUE;
+            max = 0;
             contador++;
         }
     }
-
-
 
     public void imprimirTaulaQuoficients() {
 
@@ -76,10 +92,10 @@ public class Eleccions {
             }
             for (int j = 0; j < esconsPerAssignar; j++) {
                 if (partits[i].isParticipa()) {
-                    System.out.print(" " + this.taulaResultats[i][j] + " | ");
+                    System.out.print(" " + taulaResultats[i][j] + " | ");
                 }
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 
@@ -96,4 +112,7 @@ public class Eleccions {
         }
     }
 
+
 }
+
+

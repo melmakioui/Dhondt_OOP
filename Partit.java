@@ -44,10 +44,6 @@ public class Partit {
     public void setParticipa(boolean participa) {
         this.participa = participa;
     }
-
-    public void imprimirEsconsPartits(){
-        System.out.println(getVots());
-    }
 }
 
 
