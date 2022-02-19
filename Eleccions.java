@@ -1,19 +1,19 @@
 package Dhondt_OOP;
 
-import Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit;
+
 
 public class Eleccions {
 
 
     private final int numPartits;
     private final int esconsPerAssignar;
-    private final Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit[] partits;
+    private final Partit[] partits;
     private final float[][] taulaResultats;
 
     public Eleccions(String[] partits, int[] votacions, int esconsPerAssignar, int percentatgeMinim){
 
         this.numPartits = partits.length;
-        this.partits = new Dhondt_OOP_REFACTORED.Dhondt_OOP.Partit[this.numPartits];
+        this.partits = new Partit[this.numPartits];
         this.esconsPerAssignar = esconsPerAssignar;
         this.taulaResultats = new float[this.numPartits][esconsPerAssignar];
 
