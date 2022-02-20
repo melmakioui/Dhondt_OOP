@@ -36,7 +36,7 @@ public class Partit {
         escons++;
     }
 
-    public boolean isParticipa(){
+    public boolean esParticipant(){
         return participa;
     }
 

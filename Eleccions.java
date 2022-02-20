@@ -57,24 +57,24 @@ public class Eleccions {
 
     public void calcDhondt() {
 
-        float maxVots = 0;
+        float maxQuoficient = 0;
         int maxIndex = 0;
-        float vots;
+        float votsQuoficient;
         boolean esCandidat;
 
         for (int e = 0; e < esconsPerAssignar; e++) {
             for (int i = 0; i < numPartits; i++) {
 
-                vots = taulaQuoficients[ i ][ partits[i].getEscons() ];
-                esCandidat = partits[i].isParticipa();
+                votsQuoficient = taulaQuoficients[ i ][ partits[i].getEscons() ];
+                esCandidat = partits[i].esParticipant();
 
-                if (maxVots < vots && esCandidat) {
-                    maxVots = vots;
+                if ( maxQuoficient < votsQuoficient && esCandidat) {
+                    maxQuoficient = votsQuoficient;
                     maxIndex = i;
                 }
             }
             partits[maxIndex].addEscons();
-            maxVots = 0;
+            maxQuoficient = 0;
 
         }
     }
@@ -85,11 +85,11 @@ public class Eleccions {
         System.out.println("TAULA QUOFICIENTS");
 
         for (int i = 0; i < this.numPartits; i++) {
-            if (partits[i].isParticipa()) {
+            if (partits[i].esParticipant()) {
                 System.out.print(partits[i].getNom() + " | ");
             }
             for (int j = 0; j < esconsPerAssignar; j++) {
-                if (partits[i].isParticipa()) {
+                if (partits[i].esParticipant()) {
                     System.out.print(" " + taulaQuoficients[i][j] + " | ");
                 }
             }
@@ -103,7 +103,7 @@ public class Eleccions {
         System.out.println("RESULTATS ESCONS PER PARTITS");
 
         for (int i = 0; i < this.numPartits; i++) {
-            if (partits[i].isParticipa()) {
+            if (partits[i].esParticipant()) {
                 System.out.println(partits[i].getNom() + " obté en total: " + partits[i].getEscons());
             } else System.out.println(partits[i].getNom() + " no participa, no arriba als vots minims...");
         }
