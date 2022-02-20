@@ -1,35 +1,30 @@
-package Dhondt_OOP;
-
-
+package Dhondt;
 
 public class Eleccions {
-
 
     private final int numPartits;
     private final int esconsPerAssignar;
     private final Partit[] partits;
-    private final float[][] taulaResultats;
+    private final float[][] taulaQuoficients;
 
-    public Eleccions(String[] partits, int[] votacions, int esconsPerAssignar, int percentatgeMinim){
-
+    public Eleccions(String[] partits, int[] votacions, int esconsPerAssignar, int percentatgeMinim) {
         this.numPartits = partits.length;
         this.partits = new Partit[this.numPartits];
         this.esconsPerAssignar = esconsPerAssignar;
-        this.taulaResultats = new float[this.numPartits][esconsPerAssignar];
+        this.taulaQuoficients = new float[numPartits][this.esconsPerAssignar];
 
-        initPartits(partits,votacions);
+        initPartits(partits, votacions);
         initDeterminarParticipants(percentatgeMinim);
         initTaulaDhondt();
+
     }
 
-
-    private void initPartits(String[] partits, int[] votacions){
+    private void initPartits(String[] partits, int[] votacions) {
 
         for (int i = 0; i < this.numPartits; i++) {
-            this.partits[i] = new Partit(partits[i],votacions[i]);
+            this.partits[i] = new Partit(partits[i], votacions[i]);
             //System.out.println(this.partits[i].getVots());
         }
-
     }
 
 
@@ -40,47 +35,50 @@ public class Eleccions {
             total += partits[i].getVots();
         }
         return total;
-
     }
 
 
     private void initDeterminarParticipants(float percentatgeMinim) {
-        float minimVotacions = ((float) votsTotals() * (percentatgeMinim /100));
-
+        float minimVotacions = ((float) votsTotals() * (percentatgeMinim / 100));
         for (int i = 0; i < numPartits; i++) {
-            partits[i].setParticipa((partits[i].getVots() >= minimVotacions));
+            if ((partits[i].getVots() >= minimVotacions))
+                partits[i].potParticipar();
         }
     }
-
 
 
     private void initTaulaDhondt() {
         for (int i = 0; i < numPartits; i++) {
             for (int j = 0; j < esconsPerAssignar; j++) {
-                taulaResultats[i][j] = (this.partits[i].getVots() / ((float) j + 1));
+                taulaQuoficients[i][j] = (this.partits[i].getVots() / ((float) j + 1));
             }
         }
     }
 
+    public void calcDhondt() {
 
-    public void calcDhondt(){
-
-        float max = 0;
+        float maxVots = 0;
         int maxIndex = 0;
-        int contador = 0;
+        float vots;
+        boolean esCandidat;
 
-        for (int e = 0; e < esconsPerAssignar; e++){
+        for (int e = 0; e < esconsPerAssignar; e++) {
             for (int i = 0; i < numPartits; i++) {
-                if (max < taulaResultats[ i ] [ partits[ i ].getEscons() ] && partits[ i ].isParticipa()) {
-                    max = taulaResultats[ i ] [ partits[ i ].getEscons() ];
+
+                vots = taulaQuoficients[ i ][ partits[i].getEscons() ];
+                esCandidat = partits[i].isParticipa();
+
+                if (maxVots < vots && esCandidat) {
+                    maxVots = vots;
                     maxIndex = i;
                 }
             }
-            partits[maxIndex].setEscons(1);
-            max = 0;
-            contador++;
+            partits[maxIndex].addEscons();
+            maxVots = 0;
+
         }
     }
+
 
     public void imprimirTaulaQuoficients() {
 
@@ -92,13 +90,12 @@ public class Eleccions {
             }
             for (int j = 0; j < esconsPerAssignar; j++) {
                 if (partits[i].isParticipa()) {
-                    System.out.print(" " + taulaResultats[i][j] + " | ");
+                    System.out.print(" " + taulaQuoficients[i][j] + " | ");
                 }
             }
             System.out.println();
         }
     }
-
 
 
     public void imprimirResultatsEscons() {
@@ -114,5 +111,3 @@ public class Eleccions {
 
 
 }
-
-

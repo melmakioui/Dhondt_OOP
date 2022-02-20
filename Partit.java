@@ -1,16 +1,15 @@
-package Dhondt_OOP;
+package Dhondt;
 
 public class Partit {
+
     private String nom;
     private int vots;
-    private int escons;
-    private boolean participa;
+    private int escons = 0;
+    private boolean participa = false;
 
     public Partit(String nom, int vots) {
         this.nom = nom;
         this.vots = vots;
-        this.escons = getEscons();
-        this.participa = isParticipa();
     }
 
     public String getNom() {
@@ -21,7 +20,7 @@ public class Partit {
         this.nom = nom;
     }
 
-    public int getVots() {
+    public int getVots(){
         return vots;
     }
 
@@ -29,21 +28,21 @@ public class Partit {
         this.vots = vots;
     }
 
-    public int getEscons() {
+    public int getEscons(){
         return escons;
     }
 
-    public void setEscons(int escons) {
-        this.escons += escons;
+    public void addEscons() {
+        escons++;
     }
 
-    public boolean isParticipa() {
+    public boolean isParticipa(){
         return participa;
     }
 
-    public void setParticipa(boolean participa) {
-        this.participa = participa;
+    public void potParticipar(){
+        this.participa = true;
     }
+
+
 }
-
-
